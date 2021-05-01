@@ -1,4 +1,4 @@
 django
 tensorflow
 numpy
-PIL
+pillow
