@@ -13,7 +13,7 @@ def pred_view(request):
         # return response
         return render(
             request,
-            "home.html",
+            "index.html",
             context={
                 "inp": base64.b64encode(
                     open(request.FILES.get("image").file.name, "rb").read()
@@ -22,4 +22,4 @@ def pred_view(request):
             },
         )
     else:
-        return render(request, "home.html")
+        return render(request, "index.html")

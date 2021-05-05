@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+            background-color: #757f9a;
+            background-image: linear-gradient(147deg, #757f9a 0%, #d7dde8 100%);
+        }
+
+        #image {
+            opacity: 0;
+        }
+
+        .input-group {
+            border-radius: 50px;
+            margin-top: -150px;
+        }
+
+        #upload-label {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+        }
+
+        .file-upload {
+            width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .file-upload-btn {
+            width: 100%;
+            margin: 0;
+            color: #fff;
+            background: #1FB264;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            border-bottom: 4px solid #15824B;
+            transition: all .2s ease;
+            outline: none;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .file-upload-btn:hover {
+            background: #1AA059;
+            color: #ffffff;
+            transition: all .2s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-content {
+            display: none;
+            text-align: center;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .image-upload-wrap {
+            margin-top: 20px;
+            border: 4px dashed #1FB264;
+            position: relative;
+        }
+
+        .image-dropping,
+        .image-upload-wrap:hover {
+
+            border: 4px dashed #ffffff;
+        }
+
+        .image-title-wrap {
+            padding: 0 15px 15px 15px;
+            color: #222;
+        }
+
+        .drag-text {
+            text-align: center;
+        }
+
+        .drag-text h3 {
+            font-weight: 100;
+            text-transform: uppercase;
+            color: #15824B;
+            padding: 60px 0;
+        }
+
+        .file-upload-image {
+            max-height: 200px;
+            max-width: 100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .contain {
+            margin-left: auto;
+            margin-right: auto;
+
+            margin-top: calc(calc(100vh - 405px)/2);
+        }
+
+
+        #img_contain {
+            border-radius: 5px;
+            /*  border:1px solid grey;*/
+            margin-top: 20px;
+
+        }
+    </style>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Result</title>
+
+</head>
+
+<body>
+    <div class="py-5">
+        <header class="text-white text-center">
+            <h1 class="display-4">GAN Image Result</h1>
+            <p class="lead mb-0">Upload the image and get a better result.</p>
+            <p class="mb-5 font-weight-light">Project by
+                <a href="#" class="text-white">
+                    <u>Soumya Ranjan Naik & Team</u>
+                </a>
+            </p>
+            <div id='img_contain'>
+
+                {% if not inp %}
+                <img id="blah" align='middle'
+                    src="https://res.cloudinary.com/mhmd/image/upload/v1564991372/image_pxlho1.svg"
+                    style="max-width: 300px;" class="mb-4" alt="your image" title='' />
+                {% endif %}
+                <div class="row">
+                    <div class="col">
+                        {% if inp %}
+                        <h1>Input Image</h1>
+                        <img id="blah" align='middle' src="data:image/gif;base64,{{inp}}" style="max-width: 600px;"
+                            class="mb-4" alt="your image" title='' />
+                        {% endif %}
+                    </div>
+                    <div class="col">
+                        {% if out %}
+                        <h1>Output Image</h1>
+                        <img id="blah" align='middle' src="data:image/gif;base64,{{out}}" style="max-width: 600px;"
+                            class="mb-4" alt="your image" title='' />
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        {% if not inp %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row py-4">
+                <div class="col-lg-6 mx-auto">
+                    <div class="contain animated bounce">
+                        <div class="input-group mb-3 px-2 py-2 rounded-pill bg-white shadow-sm">
+                            <input id="image" name="image" type="file" onchange="readURL(this);"
+                                class="form-control border-0">
+                            <label id="upload-label" for="" class="font-weight-light text-muted">Choose file</label>
+                            <div class="input-group-append">
+                                <label for="image" class="btn btn-light m-0 rounded-pill px-4"> <i
+                                        class="fas fa-cloud-upload-alt mr-2 text-muted" aria-hidden="true"></i><small
+                                        class="text-uppercase font-weight-bold text-muted">Choose file</small></label>
+                            </div>
+
+                        </div>
+                        <center>
+                            <button type="file" class="btn btn-info">Upload</button>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </form>
+        {% endif %}
+
+
+        {% if inp %}
+        <center>
+            <a class="btn btn-info" href="/">Go Back</a>
+        </center>
+        {% endif %}
+
+
+    </div>
+
+    <script>
+        $("#image").change(function (event) {
+            RecurFadeIn();
+            readURL(this);
+        });
+        $("#image").on('click', function (event) {
+            RecurFadeIn();
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                var filename = $("#image").val();
+                filename = filename.substring(filename.lastIndexOf('\\') + 1);
+                reader.onload = function (e) {
+                    debugger;
+                    $('#blah').attr('src', e.target.result);
+                    $('#blah').hide();
+                    $('#blah').fadeIn(500);
+                    $('.btn-trf').text(filename);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>
